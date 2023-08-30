@@ -1,0 +1,3 @@
+#!/bin/bash
+#my first script
+mkdir my_first_directory /root/tmp
