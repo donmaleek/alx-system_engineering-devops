@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# This is a script that display a list of running process
+
+# Display header
+echo "PID   PPID   UID   CMD"
+echo "-----------------------"
+
+# Loop through all processes
+for pid in $(ps -eo pid); do
+    # Get process information
+    ppid=$(ps -o ppid= -p $pid)
+    uid=$(ps -o uid= -p $pid)
+    cmd=$(ps -o cmd= -p $pid)
+
+    # Display process information
+    echo "$pid    $ppid    $uid    $cmd"
+done
+
