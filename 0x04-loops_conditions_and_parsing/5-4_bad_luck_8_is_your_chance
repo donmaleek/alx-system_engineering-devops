@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# This script prints bad luck at 4th position
+# Prints Good luck at 8th position
+# and best school all the other choice of 10
+
+# Initialize counter
+count=1
+
+# Loop until counter reaches 10
+while [ $count -le 10 ]
+do
+    # Check if it's the 4th iteration
+    if [ $count -eq 4 ]; then
+        echo "bad luck"
+    # Check if it's the 8th iteration
+    elif [ $count -eq 8 ]; then
+        echo "good luck"
+    else
+        echo "Best School"
+    fi
+    
+    ((count++))
+done
+
