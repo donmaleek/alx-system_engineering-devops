@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#This is script that shows time 
+#in hours and minutes
+
+# Initialize variables
+hour=0
+minute=1
+
+# Loop until hour reaches 12
+while [ $hour -le 12 ]
+do
+    # Print the current time
+	printf "Hour: 0"
+	printf "%d\n" $minute
+#	printf "Hour: 1"
+#	printf "%d\n" $hour 
+
+    # Increment minute
+    ((minute++))
+    
+    # Check if minute reached 60
+    if [ $minute -eq 60 ]; then
+        ((hour++))
+        minute=0
+    fi
+done 
+
