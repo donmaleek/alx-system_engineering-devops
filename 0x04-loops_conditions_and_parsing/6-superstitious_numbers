@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# This is a script prints from 1 to 20
+# but prints different outcomes on
+# specific counts
+
+# Initialize counter
+count=1
+
+# Loop until counter reaches 20
+while [ $count -le 20 ]
+do
+    case $count in
+        4)
+            echo "$count and bad luck from China"
+            ;;
+        9)
+            echo "$count and bad luck from Japan"
+            ;;
+        17)
+            echo "$count and bad luck from Italy"
+            ;;
+        *)
+            echo "$count"
+            ;;
+    esac
+    
+    ((count++))
+done
+
