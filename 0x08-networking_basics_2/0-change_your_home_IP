@@ -1,4 +1,4 @@
-#!usr/bin/env bash
+#!/usr/bin/env bash
 # A script that sets up a server as follows:
 #********* sets localhost ip to 127.0.0.2
 #********* sets Facebook.com ip to 8.8.8.8
