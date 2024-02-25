@@ -1,27 +1,18 @@
 #!/usr/bin/env bash
-#This is script that shows time 
-#in hours and minutes
+# Displays the time for 12 horus and 59 minutes.
+#   Displays hours from 0 to 12
+#   Displays minutes from 1 to 59
 
-# Initialize variables
 hour=0
-minute=1
 
-# Loop until hour reaches 12
 while [ $hour -le 12 ]
 do
-    # Print the current time
-	printf "Hour: 0"
-	printf "%d\n" $minute
-#	printf "Hour: 1"
-#	printf "%d\n" $hour 
-
-    # Increment minute
-    ((minute++))
-    
-    # Check if minute reached 60
-    if [ $minute -eq 60 ]; then
-        ((hour++))
-        minute=0
-    fi
-done 
-
+  echo "Hour: $hour"
+  minute=1
+  while [ $minute -le 59 ]
+  do
+    echo "$minute"
+    (( minute++ ))
+  done
+  (( hour++ ))
+done
