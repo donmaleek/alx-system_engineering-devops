@@ -1,19 +1,12 @@
-# Include the python module
-include python
+#install specific flask (2.1.0) and werkzeug (2.1.1)
 
-# Define the specific versions of Flask and Werkzeug
-$flask_version = '2.1.0'
-$werkzeug_version = '2.1.1'
-
-# Ensure Flask is installed with the specified version
-python::pip { 'flask':
-  ensure    => $flask_version,
-  provider  => 'pip3',
+exec { 'install_flask':
+  command => '/usr/bin/pip3 install Flask==2.1.0',
+  unless  => '/usr/bin/pip3 show Flask | grep -q "Version: 2.1.0"',
 }
 
-# Ensure Werkzeug is installed with the specified version
-python::pip { 'werkzeug':
-  ensure    => $werkzeug_version,
-  provider  => 'pip3',
+exec { 'install_werkzeug':
+  command => '/usr/bin/pip3 install Werkzeug==2.1.1',
+  unless  => '/usr/bin/pip3 show Werkzeug | grep -q "Version: 2.1.1"',
 }
 
