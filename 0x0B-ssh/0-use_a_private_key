@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 # Server details
 server_ip="54.145.83.153"
