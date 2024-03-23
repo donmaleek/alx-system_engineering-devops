@@ -2,7 +2,7 @@
 
 # Server details
 server_ip="54.145.83.153"
-private_key="/home/mathayo77/.ssh/school"
+private_key="/root/.ssh/school"
 
 # SSH connection command
 ssh_command="ssh -i $private_key ubuntu@$server_ip"
