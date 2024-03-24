@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 # Allows us to connect to my server using the private key with user ubuntu
-export SSH_PRIVATE_KEY=~/.ssh/school
-ssh ubuntu@54.145.83.153
+ssh ubuntu -i ~/.ssh/school
