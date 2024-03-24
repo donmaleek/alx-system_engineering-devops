@@ -1,22 +1,11 @@
-#!/bin/bash
+#!/bin/env bash
 
 # Server details
 server_ip="54.145.83.153"
-server_name="170109-web-01"
-private_key="/home/mathayo77/.ssh/school"
+private_key="/root/.ssh/school"
 
-# SSH connection command using IP address
-ssh_command_ip="ssh -i $private_key ubuntu@$server_ip"
+# SSH connection command
+ssh_command="ssh -i $private_key ubuntu@$server_ip"
 
-# SSH connection command using server name
-ssh_command_name="ssh -i $private_key ubuntu@$server_name"
-
-# Try connecting using IP address
-$ssh_command_ip
-
-# If connection using IP fails, try using server name
-if [ $? -ne 0 ]; then
-    echo "Failed to connect using IP address. Trying server name..."
-    $ssh_command_name
-fi
-
+# Execute SSH command
+$ssh_command
