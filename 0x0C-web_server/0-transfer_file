@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Variables
+SERVER_ADDRESS="54.145.83.153"
+USERNAME="ubuntu"
+SSH_KEY="/home/mathayo77/.ssh/school"  # Path to your SSH private key
+LOCAL_FILE="/home/mathayo77/ALX_software_engineering/Cohort-19_sprint-2/alx-system_engineering-devops/0x0C-web_server/some_page.html"
+REMOTE_DIR="~/"
+
+# Transfer file to server
+scp -i "$SSH_KEY" "$LOCAL_FILE" "$USERNAME@$SERVER_ADDRESS:$REMOTE_DIR"
+
