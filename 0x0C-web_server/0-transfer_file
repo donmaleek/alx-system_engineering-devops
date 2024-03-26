@@ -4,7 +4,7 @@
 SERVER_ADDRESS="54.145.83.153"
 USERNAME="ubuntu"
 SSH_KEY="/home/mathayo77/.ssh/school"  # Path to your SSH private key
-LOCAL_FILE="/home/mathayo77/ALX_software_engineering/Cohort-19_sprint-2/alx-system_engineering-devops/0x0C-web_server/some_page.html"
+LOCAL_FILE="/home/mathayo77/ALX_software_engineering/Cohort-19_sprint-2/alx-system_engineering-devops/0x0C-web_server/4-not_found_page_404"
 REMOTE_DIR="~/"
 
 # Transfer file to server
