@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# Installs, configures, and starts the load balancer
+sudo apt-get update
+sudo apt-get -y install --no-install-recommends software-properties-common
+sudo add-apt-repository -y ppa:vbernat/haproxy-2.4
+sudo apt-get -y install haproxy
+
+# the load balancer's configuration
+DOMAIN_NAME='beta-scribbles.tech'
+INIT_FILE='/etc/default/haproxy'
+CONFIG_FILE='/etc/haproxy/haproxy.cfg'
+HAPROXY_LB_CONFIG=$(cat <<EOF
+#--$DOMAIN_NAME-params-begin--
+backend $DOMAIN_NAME-backend
+    balance roundrobin
+    server 170109-web-01 54.145.83.153 check
+    server 170109-web-02 52.91.146.118 check
+frontend $DOMAIN_NAME-frontend
+    bind *:80
+    mode http
+    default_backend $DOMAIN_NAME-backend
+#--$DOMAIN_NAME-params-end--
+EOF
+)
+
+touch -a "$INIT_FILE" "$CONFIG_FILE"
+
+if ! grep -q '^ENABLED=[01]$' "$INIT_FILE"; then
+    echo 'ENABLED=1' >> "$INIT_FILE"
+else
+    sed -i 's/^ENABLED=0$/ENABLED=1/' "$INIT_FILE"
+fi
+
+if ! grep -q "$DOMAIN_NAME-backend" "$CONFIG_FILE"; then
+    echo -e "$HAPROXY_LB_CONFIG" >> "$CONFIG_FILE"
+else
+    sed -i "/#--$DOMAIN_NAME-params-begin--/,/#--$DOMAIN_NAME-params-end--/c$HAPROXY_LB_CONFIG" "$CONFIG_FILE"
+fi
+
+if systemctl is-active --quiet haproxy; then
+    systemctl restart haproxy
+else
+    systemctl start haproxy
+fi
+
