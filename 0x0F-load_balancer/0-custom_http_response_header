@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#This script captures the header and name it according to server
+sudo sed -i "/server_name _/a add_header  X-Served-By $HOSTNAME;" /etc/nginx/sites-enabled/default
+
+#testing for errors
+sudo nginx -t
+
+#restart after making changes
+sudo service nginx restart
