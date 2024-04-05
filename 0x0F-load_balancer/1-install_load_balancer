@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Installs, configures, and starts the load balancer
 sudo apt-get update
 sudo apt-get -y install --no-install-recommends software-properties-common
@@ -10,37 +9,46 @@ sudo apt-get -y install haproxy
 DOMAIN_NAME='beta-scribbles.tech'
 INIT_FILE='/etc/default/haproxy'
 CONFIG_FILE='/etc/haproxy/haproxy.cfg'
-HAPROXY_LB_CONFIG=$(cat <<EOF
+HAPROXY_LB_CONFIG=\
+"
 #--$DOMAIN_NAME-params-begin--
 backend $DOMAIN_NAME-backend
-    balance roundrobin
-    server 170109-web-01 54.145.83.153 check
-    server 170109-web-02 52.91.146.118 check
+	balance roundrobin
+	server 170109-web-01 54.145.83.153 check
+	server 170109-web-02 52.91.146.118 check
 frontend $DOMAIN_NAME-frontend
-    bind *:80
-    mode http
-    default_backend $DOMAIN_NAME-backend
+	bind *:80
+	mode http
+	default_backend $DOMAIN_NAME-backend
 #--$DOMAIN_NAME-params-end--
-EOF
-)
+"
 
-touch -a "$INIT_FILE" "$CONFIG_FILE"
+[ -f "$INIT_FILE" ] || touch "$INIT_FILE"
+[ -f "$CONFIG_FILE" ] || touch "$CONFIG_FILE"
 
-if ! grep -q '^ENABLED=[01]$' "$INIT_FILE"; then
-    echo 'ENABLED=1' >> "$INIT_FILE"
+CONFIG_WORDS=$(grep -Eco "$DOMAIN_NAME-backend" < $CONFIG_FILE)
+
+if [ "$(grep -Eco '^ENABLED=[01]$' < $INIT_FILE)" -gt 0 ]; then
+	sed -i 's/^ENABLED=0$/ENABLED=1/' "$INIT_FILE"
 else
-    sed -i 's/^ENABLED=0$/ENABLED=1/' "$INIT_FILE"
+	echo 'ENABLED=1' >> $INIT_FILE
 fi
 
-if ! grep -q "$DOMAIN_NAME-backend" "$CONFIG_FILE"; then
-    echo -e "$HAPROXY_LB_CONFIG" >> "$CONFIG_FILE"
+if [ "$CONFIG_WORDS" -eq 0 ]; then
+	echo -e "$HAPROXY_LB_CONFIG" >> $CONFIG_FILE
 else
-    sed -i "/#--$DOMAIN_NAME-params-begin--/,/#--$DOMAIN_NAME-params-end--/c$HAPROXY_LB_CONFIG" "$CONFIG_FILE"
+	start_tkn="#--$DOMAIN_NAME-params-begin--"
+	end_tkn="#--$DOMAIN_NAME-params-end--"
+	a=$(grep -onE "$start_tkn" < "$CONFIG_FILE" | cut -d : -f1)
+	b=$(grep -onE "$end_tkn" < "$CONFIG_FILE" | cut -d : -f1)
+	a=$((a - 1))
+	b=$((b + 1))
+	sed -i "$a,$b"d "$CONFIG_FILE"
+	echo -en "$HAPROXY_LB_CONFIG" >> $CONFIG_FILE
 fi
 
-if systemctl is-active --quiet haproxy; then
-    systemctl restart haproxy
+if [ "$(pgrep -c haproxy)" -le 0 ]; then
+	service haproxy start
 else
-    systemctl start haproxy
+	service haproxy restart
 fi
-
