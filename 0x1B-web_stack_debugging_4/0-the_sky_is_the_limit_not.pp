@@ -1,15 +1,3 @@
-# Increase the ULIMIT of the default file
-exec { 'fix_for_nginx_ulimit':
-  command => 'sudo sed -i "s/15/4096/" /etc/default/nginx',
-  path    => '/usr/local/bin/:/bin/',
-  refreshonly => true,
-}
-
-# Restart Nginx when the ULIMIT is updated
-service { 'nginx':
-  ensure     => running,
-  enable     => true,
-  subscribe  => Exec['fix_for_nginx_ulimit'],
-}
-
-
+# Puppet script
+exec { '/usr/bin/env sed -i s/15/1000/ /etc/default/nginx': }
+-> exec { '/usr/bin/env service nginx restart': }
